@@ -1,4 +1,5 @@
 (function (global) {
+    const Accordions = [];
     let Accordion = function (selector, options) {
         return new Accordion.init(selector, options);
     }
@@ -36,6 +37,7 @@
         //Show accordion only after everything is loaded
         afterInit: function () {
             this.accordion.style.visibility = 'visible';
+            Accordions.push(this);
         },
 
         //Checks if accordion already has a group that's revealed
@@ -109,10 +111,10 @@
 
     //This is the properties of individual groups in an Accordion
     function AccordionGroup(group) {
+        this.bodyHeight;
         this.wrapper = group;
         this.head = group.querySelector(".accordion__group__head");
         this.body = group.querySelector(".accordion__group__body");
-        this.bodyHeight = window.getComputedStyle(this.body).getPropertyValue('height');
         this.isRevealed = false;
         this.wasRevealed = false;
 
@@ -126,6 +128,10 @@
             this.playOpeningAnimation();
             this.isRevealed = true;
             this.wrapper.classList.add("accordion__group--revealed");
+        }
+
+        this.setBodyHeight = () => {
+            this.bodyHeight = window.getComputedStyle(this.body).getPropertyValue('height');
         }
 
         this.playAnimation = (height) => {
@@ -143,6 +149,7 @@
         //Sets the first group content in an Accordion to be it's height
         //Sets the rest the remaining group contents to 0 height
         this.initGroup = (isFirstItem, transitionTime, isLastItem) => {
+            this.setBodyHeight();
             if (isFirstItem) {
                 this.isRevealed = true;
                 this.wasRevealed = true;
