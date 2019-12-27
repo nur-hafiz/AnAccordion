@@ -10,9 +10,6 @@
 
         .accordion {
             visibility: hidden;
-            border-bottom: 1px solid black;
-            border-left: 1px solid black;
-            border-right: 1px solid black;
         }
 
         .accordion__group {
@@ -27,17 +24,35 @@
             background: #AD1C2D;
             color: white;
             border-top: 1px solid black;
+            padding: 10px 20px 15px;
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+        }
+
+        .accordion__group--last .accordion__group__head {
+            border-bottom: 1px solid black;
+        }
+
+        .accordion__group--revealed .accordion__group__head {
+            border-bottom: 1px solid black;
+        }
+
+        .accordion__group--last.accordion__group--revealed .accordion__group__head {
+            border-bottom: 0;
         }
 
         .accordion__group__body {
             overflow: hidden;
             background: green;
             color: white;
-            border-top: 0px solid black;
+            padding: 0 20px;
+            border-left: 1px solid black;
+            border-right: 1px solid black;
         }
 
         .accordion__group--revealed .accordion__group__body {
-            border-top: 1px solid black;
+            padding-top: 10px;
+            padding: 10px 20px 15px;
         }
     </style>
 </head>
