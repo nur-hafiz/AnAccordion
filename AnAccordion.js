@@ -131,7 +131,16 @@
         }
 
         this.setBodyHeight = () => {
+            this.body.style.height = 'auto';
+
             this.bodyHeight = window.getComputedStyle(this.body).getPropertyValue('height');
+
+            if (this.isRevealed) {
+                this.open()
+            } else {
+                this.body.style.height = 0;
+            }
+
         }
 
         this.playAnimation = (height) => {
@@ -166,6 +175,30 @@
 
 
     }
+
+
+    //This chunk is to resize the accordion groups when the window is resized
+    var debounceId;
+
+    // Debounce function: Input as function which needs to be debounced and delay is the debounced time in milliseconds
+    var debounce = function (func, delay) {
+        // Cancels the setTimeout method execution
+        clearTimeout(debounceId)
+        // Executes the func after delay time.
+        debounceId = setTimeout(func, delay)
+    }
+
+    // Event listener on the input box
+    global.addEventListener('resize', function () {
+        // Debounces makeAPICall method
+        debounce(function () {
+            Accordions.forEach(accordion => {
+                accordion.groups.forEach(group => {
+                    group.setBodyHeight();
+                });
+            })
+        }, 750);
+    });
 
 
 }(window));
