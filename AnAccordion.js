@@ -111,6 +111,7 @@
 
     //This is the properties of individual groups in an Accordion
     function AccordionGroup(group) {
+        this.transitionTime;
         this.bodyHeight;
         this.wrapper = group;
         this.head = group.querySelector(".accordion__group__head");
@@ -144,7 +145,10 @@
         }
 
         this.playAnimation = (height) => {
+            this.wrapper.classList.add("accordion__group--animating");
             this.body.style.height = height;
+            setTimeout(() => this.wrapper.classList.remove("accordion__group--animating")
+                , this.transitionTime);
         }
 
         this.playOpeningAnimation = () => {
@@ -170,6 +174,8 @@
             if (isLastItem) {
                 this.wrapper.classList.add('accordion__group--last');
             }
+
+            this.transitionTime = transitionTime;
             this.body.style.transition = transitionTime.toString() + 'ms';
         }
 
@@ -188,16 +194,15 @@
         debounceId = setTimeout(func, delay)
     }
 
-    // Event listener on the input box
+
     global.addEventListener('resize', function () {
-        // Debounces makeAPICall method
-        debounce(function () {
-            Accordions.forEach(accordion => {
-                accordion.groups.forEach(group => {
-                    group.setBodyHeight();
-                });
-            })
-        }, 750);
+        debounce(() =>
+            Accordions.forEach(accordion =>
+                accordion.groups.forEach(group =>
+                    group.setBodyHeight())
+            ), 750
+        );
+
     });
 
 
