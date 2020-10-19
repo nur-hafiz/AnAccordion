@@ -4,7 +4,8 @@ A simple accordion library
 ## ReadMe contents
 1. Quick Usage
 2. Change Logs
-3. Upcoming Features
+3. Upcoming Changes
+4. Known Bugs
 
 ## 1. Quick Usage Guide
 AnAccordion.js is a standalone JS library. No other dependancies required.
@@ -126,3 +127,9 @@ There's really nothing for now until the next version
 
 ### Breaking
 1. Enable passing HTML object into Accordion() function. This is so that we can pass the object itself into the function instead of selector, which makes it nicer for instantiating multiple accordions
+
+## Known Bugs
+
+### High Priority Bugs
+1. Currently tab__group__body height do not display correctly if there is a padding-top and padding-bottom unless screen is resized.
+When setBodyHeight method is called during initGroup, the getComputedStyle function is not returning padding-top. There is a workaround for this by adjusting padding in playAnimation() function but this would mean adding stylistic behaviour into the JS.
