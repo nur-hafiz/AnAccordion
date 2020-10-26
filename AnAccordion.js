@@ -1,5 +1,5 @@
 (function (global) {
-    const Accordions = [];
+    const ACCORDIONS = [];
     let Accordion = function (selector, options) {
         return new Accordion.init(selector, options);
     }
@@ -23,36 +23,34 @@
     //Initializes accordion groups, mainly to get the height of content
     //Sets height of first content to it's height and set the rest to 0
     Accordion.prototype.initGroups = function() {
-        const groups = this.accordion.querySelectorAll(".accordion__group");
+        const GROUPS = this.accordion.querySelectorAll(".accordion__group");
 
-        groups.forEach((accordionGroup, index) => {
-            const group = new AccordionGroup(accordionGroup);
+        GROUPS.forEach((group, index) => {
+            const GROUP = new AccordionGroup(group);
 
-            group.initGroup(index == 0, this.options.transitionTime, index == groups.length - 1);
-            group.head.addEventListener("click", () => {
-                this.handleClick(group);
+            GROUP.initGroup(index == 0, this.options.transitionTime, index == GROUPS.length - 1);
+            GROUP.head.addEventListener("click", () => {
+                this.handleClick(GROUP);
             });
 
-            this.groups.push(group);
-
+            this.groups.push(GROUP);
         });
     }
 
     //Show accordion only after everything is loaded
     Accordion.prototype.afterInit = function() {
         this.accordion.style.visibility = 'visible';
-        Accordions.push(this);
+        ACCORDIONS.push(this);
     }
 
     
     //Checks if accordion already has a group that's revealed
     //This only runs if accordion disallows multi reveal
     Accordion.prototype.hasRevealed = function () {
-        let filtered = this.groups.filter(group => { return group.isRevealed });
-        if (filtered.length == 0) {
+        const FILTERED = this.groups.filter(group => { return group.isRevealed });
+        if (FILTERED.length == 0)
             return false;
-        }
-        return filtered[0];
+        return FILTERED[0];
     }
 
     Accordion.prototype.handleClick = function (group) {
