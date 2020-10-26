@@ -115,8 +115,9 @@ Currently in version 1, the shortest way to do this is to select all the accordi
 
 
 ## Change Logs
-### Ver 1.0.0
-There's really nothing for now until the next version
+### Ver 1.0.1
+1. Refactored Accordion.prototype to be in smaller chunks
+2. Rename const variables to uppercase
 
 ## Upcoming Changes
 
