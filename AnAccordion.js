@@ -4,94 +4,92 @@
         return new Accordion.init(selector, options);
     }
 
-    Accordion.prototype = {
-        //Initializes accordion with all options provided by users
-        //Options that are not specified by user will be provided by defaultOptions
-        initOptions: function (options) {
-            this.options = options;
-            for (let key in defaultOptions) {
-                if (!this.options.hasOwnProperty(key))
-                    this.options[key] = defaultOptions[key];
-            }
-        },
-
-        //Initializes accordion groups, mainly to get the height of content
-        //Sets height of first content to it's height and set the rest to 0
-        initGroups: function () {
-            const groups = this.accordion.querySelectorAll(".accordion__group");
-
-            groups.forEach((accordionGroup, index) => {
-                const group = new AccordionGroup(accordionGroup);
-
-                group.initGroup(index == 0, this.options.transitionTime, index == groups.length - 1);
-                group.head.addEventListener("click", () => {
-                    this.handleClick(group);
-                });
-
-                this.groups.push(group);
-
-            });
-
-        },
-
-        //Show accordion only after everything is loaded
-        afterInit: function () {
-            this.accordion.style.visibility = 'visible';
-            Accordions.push(this);
-        },
-
-        //Checks if accordion already has a group that's revealed
-        //This only runs if accordion disallows multi reveal
-        hasRevealed: function () {
-            let filtered = this.groups.filter(group => { return group.isRevealed });
-            if (filtered.length == 0) {
-                return false;
-            }
-            return filtered[0];
-        },
-
-        handleClick: function (group) {
-            let groupWasClosedOnClick = true;
-            let waitForClosingAnimation = false;
-
-            //Close it if it's already opened
-            if (group.isRevealed) {
-                group.close();
-                groupWasClosedOnClick = false;
-            }
-
-            //If multireveal is not allowed, close existing revealed group
-            if (!this.options.allowMultiReveal) {
-                let revealed = this.hasRevealed();
-                if (revealed) {
-                    revealed.close();
-                    waitForClosingAnimation = true;
-                }
-            }
-
-            //Open group if it was closed when click
-            if (groupWasClosedOnClick) {
-                //Delay opening animation if we're waiting for closing animation to finish
-                if (waitForClosingAnimation && this.options.queueTransition) {
-                    setTimeout(function () {
-                        group.open()
-                    }, this.options.transitionTime);
-                } else {
-                    group.open();
-                }
-            }
-
-            //TODO: Add a blocker so that user can't click while transition is running
-            setTimeout(() => { }, this.options.transitionTime);
-        }
-    }
-
-    //The default options given if users do not provide
-    var defaultOptions = {
+    const DEFAULT_OPTIONS = {
         allowMultiReveal: false,
         transitionTime: 200,
         queueTransition: true
     }
+
+    //Initializes accordion with all options provided by users
+    //Options that are not specified by user will be provided by DEFAULT_OPTIONS
+    Accordion.prototype.initOptions = function(options) {
+        this.options = options;
+        for (let key in DEFAULT_OPTIONS) {
+            if (!this.options.hasOwnProperty(key))
+                this.options[key] = DEFAULT_OPTIONS[key];
+        }
+    }
+
+    //Initializes accordion groups, mainly to get the height of content
+    //Sets height of first content to it's height and set the rest to 0
+    Accordion.prototype.initGroups = function() {
+        const groups = this.accordion.querySelectorAll(".accordion__group");
+
+        groups.forEach((accordionGroup, index) => {
+            const group = new AccordionGroup(accordionGroup);
+
+            group.initGroup(index == 0, this.options.transitionTime, index == groups.length - 1);
+            group.head.addEventListener("click", () => {
+                this.handleClick(group);
+            });
+
+            this.groups.push(group);
+
+        });
+    }
+
+    //Show accordion only after everything is loaded
+    Accordion.prototype.afterInit = function() {
+        this.accordion.style.visibility = 'visible';
+        Accordions.push(this);
+    }
+
+    
+    //Checks if accordion already has a group that's revealed
+    //This only runs if accordion disallows multi reveal
+    Accordion.prototype.hasRevealed = function () {
+        let filtered = this.groups.filter(group => { return group.isRevealed });
+        if (filtered.length == 0) {
+            return false;
+        }
+        return filtered[0];
+    }
+
+    Accordion.prototype.handleClick = function (group) {
+        let groupWasClosedOnClick = true;
+        let waitForClosingAnimation = false;
+
+        //Close it if it's already opened
+        if (group.isRevealed) {
+            group.close();
+            groupWasClosedOnClick = false;
+        }
+
+        //If multireveal is not allowed, close existing revealed group
+        if (!this.options.allowMultiReveal) {
+            let revealed = this.hasRevealed();
+            if (revealed) {
+                revealed.close();
+                waitForClosingAnimation = true;
+            }
+        }
+
+        //Open group if it was closed when click
+        if (groupWasClosedOnClick) {
+            //Delay opening animation if we're waiting for closing animation to finish
+            if (waitForClosingAnimation && this.options.queueTransition) {
+                setTimeout(function () {
+                    group.open()
+                }, this.options.transitionTime);
+            } else {
+                group.open();
+            }
+        }
+
+        //TODO: Add a blocker so that user can't click while transition is running
+        setTimeout(() => { }, this.options.transitionTime);
+    }
+
 
     //The Accordion properties
     Accordion.init = function (selector, options) {
@@ -107,7 +105,6 @@
 
     Accordion.init.prototype = Accordion.prototype;
 
-    global.Accordion = Accordion;
 
     //This is the properties of individual groups in an Accordion
     function AccordionGroup(group) {
@@ -205,7 +202,7 @@
 
     });
 
-
+    global.Accordion = Accordion;
 }(window));
 
 const newAccordion = Accordion('.accordion', { allowMultiReveal: true, transitionTime: 1500, queueTransition: false });
